@@ -2,6 +2,7 @@
 
 A patch for ST (Simple Terminal) adding support for curly and colored underlines.
 
+![terminal neovim lsp](images/terminal3.png)
 ![terminal](images/terminal.png)
 ![terminal](images/terminal2.png)
 
