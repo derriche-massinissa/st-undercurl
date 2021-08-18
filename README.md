@@ -5,6 +5,7 @@
 <p align="center">
 	<a href="#screenshots">Screenshots</a> |
 	<a href="#installation">Installation</a>
+	<a href="#style">Style</a>
 </br>
 </br>
 <a href=""><img alt="platforms" src="https://img.shields.io/static/v1?label=Platforms&message=Linux&color=blue&style=flat-square"></a>
@@ -49,3 +50,28 @@ special underlines. You do this with the following command:
 ```shell
 tic -sx st.info
 ```
+
+## Style
+
+You can choose between three different curly underline styles:
+
+Curly:
+![style curly](images/style_curly.png)
+
+Spiky:
+![style spiky](images/style_spiky.png)
+
+Capped:
+![style capped](images/style_capped.png)
+
+To change the style, edit the `config.def.h` file, it looks like this:
+```cpp
+// Available styles
+#define UNDERCURL_CURLY 0
+#define UNDERCURL_SPIKY 1
+#define UNDERCURL_CAPPED 2
+// Active style
+#define UNDERCURL_STYLE UNDERCURL_CAPPED
+```
+
+Just modify `UNDERCURL_STYLE` to one of the three available styles.
