@@ -1,8 +1,8 @@
 diff --git a/config.def.h b/config.def.h
-index 6f05dce..b40a875 100644
+index 6f05dce..7ae1b92 100644
 --- a/config.def.h
 +++ b/config.def.h
-@@ -470,3 +470,29 @@ static char ascii_printable[] =
+@@ -470,3 +470,27 @@ static char ascii_printable[] =
  	" !\"#$%&'()*+,-./0123456789:;<=>?"
  	"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
  	"`abcdefghijklmnopqrstuvwxyz{|}~";
@@ -29,9 +29,7 @@ index 6f05dce..b40a875 100644
 +#define UNDERCURL_SPIKY 1
 +#define UNDERCURL_CAPPED 2
 +// Active style
-+#define UNDERCURL_STYLE UNDERCURL_CAPPED
-+//
-+#define UNDERCURL_WIDTH_THRESHOLD 40
++#define UNDERCURL_STYLE UNDERCURL_SPIKY
 diff --git a/st.c b/st.c
 index 76b7e0d..542ab3a 100644
 --- a/st.c
@@ -175,7 +173,7 @@ index 8201ad6..659878c 100644
  	am,
  	bce,
 diff --git a/x.c b/x.c
-index 210f184..43c3a1c 100644
+index 210f184..3a0e79e 100644
 --- a/x.c
 +++ b/x.c
 @@ -45,6 +45,14 @@ typedef struct {
@@ -245,14 +243,15 @@ index 210f184..43c3a1c 100644
  void
  xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, int y)
  {
-@@ -1461,8 +1514,356 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
+@@ -1461,8 +1514,357 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
  
  	/* Render underline and strikethrough. */
  	if (base.mode & ATTR_UNDERLINE) {
 -		XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent + 1,
 -				width, 1);
 +		// Underline Color
-+		int wlw = (win.ch / UNDERCURL_WIDTH_THRESHOLD) + 1; // Wave Line Width
++		const int widthThreshold  = 28; // +1 width every widthThreshold px of font
++		int wlw = (win.ch / widthThreshold) + 1; // Wave Line Width
 +		int linecolor;
 +		if ((base.ucolor[0] >= 0) &&
 +			!(base.mode & ATTR_BLINK && win.mode & MODE_BLINK) &&
@@ -428,7 +427,7 @@ index 210f184..43c3a1c 100644
 +						CoordModePrevious);
 +
 +				// Draw a second underline with an offset of 1 pixel
-+				if (wlw == 1) {
++				if ( ((win.ch / (widthThreshold/2)) % 2)) {
 +					points[0].x++;
 +
 +					XDrawLines(xw.dpy, XftDrawDrawable(xw.draw), ugc, points,
@@ -586,7 +585,7 @@ index 210f184..43c3a1c 100644
 +						CoordModeOrigin);
 +
 +				// Draw a second underline with an offset of 1 pixel
-+				if (wlw == 1) {
++				if ( ((win.ch / (widthThreshold/2)) % 2)) {
 +					for (int i = 0; i < npoints; i++)
 +						points[i].x++;
 +
